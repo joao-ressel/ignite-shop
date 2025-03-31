@@ -8,8 +8,10 @@ import { Container, Header } from "@/styles/pages/app";
 globalStyles();
 
 export const metadata: Metadata = {
-  title: "Meu App",
-  description: "Descrição do meu aplicativo",
+  title: "Ignite Shop",
+  icons: {
+    icon: "/simbol.ico", 
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

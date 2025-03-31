@@ -1,53 +1,25 @@
-"use client";
+import { stripe } from "@/lib/stripe";
+import ProductSlider from "@/components/product-slider";
 
-import { Img } from "@/styles/global";
-import {useKeenSlider} from 'keen-slider/react';
-import { HomeContainer, Product } from "@/styles/pages/home";
+export default async function Home() {
+  const response = await stripe.products.list();
 
-import camiseta1 from "../assets/camisetas/Type6.png";
-import camiseta2 from "../assets/camisetas/Type7.png";
-import camiseta3 from "../assets/camisetas/Type8.png";
-import camiseta4 from "../assets/camisetas/Type9.png";
+  const products = await Promise.all(
+    response.data.map(async (product) => {
+      const price = await stripe.prices.retrieve(product.default_price as string);
 
-import 'keen-slider/keen-slider.min.css'
-
-export default function Home() {
-  const [sliderRef] = useKeenSlider({
-    slides: {
-      perView: 3,
-      spacing: 48
-    }
-  })
-  return (
-    <HomeContainer ref={sliderRef} className="keen-slider">
-      <Product className="keen-slider__slide">
-        <Img src={camiseta1.src} width={520} height={480}/>
-        <footer>
-          <strong>Camiseta X</strong>
-          <span>R$ 79,90</span>
-        </footer>
-      </Product>
-      <Product className="keen-slider__slide">
-        <Img src={camiseta2.src} width={520} height={480}/>
-        <footer>
-          <strong>Camiseta Z</strong>
-          <span>R$ 82,90</span>
-        </footer>
-      </Product>
-      <Product className="keen-slider__slide">
-        <Img src={camiseta3.src} width={520} height={480}/>
-        <footer>
-          <strong>Camiseta L</strong>
-          <span>R$ 72,90</span>
-        </footer>
-      </Product>
-      <Product className="keen-slider__slide">
-        <Img src={camiseta4.src} width={520} height={480}/>
-        <footer>
-          <strong>Camiseta M</strong>
-          <span>R$ 85,90</span>
-        </footer>
-      </Product>
-      </HomeContainer>
+      return {
+        id: product.id,
+        name: product.name,
+        images: product.images,
+        defalt_price: product.default_price,
+        price: new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: price.currency.toUpperCase(),
+        }).format(price.unit_amount! / 100), // Convertendo de centavos para reais/dólares
+      };
+    })
   );
+
+  return <ProductSlider products={products} />;
 }
