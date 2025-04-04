@@ -1,25 +1,20 @@
-import { stripe } from "@/lib/stripe";
-import ProductSlider from "@/components/product-slider";
+import { getProducts } from "@/lib/stripe";
+import Home from "./home";
 
-export default async function Home() {
-  const response = await stripe.products.list();
+/*
+O Next.js usa revalidate automaticamente quando um Server Component contém fetch() ou qualquer 
+função assíncrona que busca dados.
 
-  const products = await Promise.all(
-    response.data.map(async (product) => {
-      const price = await stripe.prices.retrieve(product.default_price as string);
+✅ A página será gerada estaticamente (SSG) no momento do build.
+✅ O Next.js irá revalidar (gerar uma nova versão da página) a cada 2 horas, sem precisar de um novo 
+deploy.
+✅ Os usuários sempre recebem a versão mais recente da página sem precisar esperar pela geração no 
+momento do acesso (ISR - Incremental Static Regeneration).
+*/
+export const revalidate = 60 * 60 * 2; // Mantém SSG a cada 2horas
 
-      return {
-        id: product.id,
-        name: product.name,
-        images: product.images,
-        defalt_price: product.default_price,
-        price: new Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: price.currency.toUpperCase(),
-        }).format(price.unit_amount! / 100), // Convertendo de centavos para reais/dólares
-      };
-    })
-  );
+export default async function Page() {
+  const products = await getProducts();
 
-  return <ProductSlider products={products} />;
+  return <Home products={products} />;
 }

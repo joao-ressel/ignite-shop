@@ -4,13 +4,14 @@ import { globalStyles } from "@/styles/global";
 import type { Metadata } from "next";
 import logoImg from "../assets/logo.svg";
 import { Container, Header } from "@/styles/pages/app";
+import Link from "next/link";
 
 globalStyles();
 
 export const metadata: Metadata = {
   title: "Ignite Shop",
   icons: {
-    icon: "/simbol.ico", 
+    icon: "/simbol.ico",
   },
 };
 
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Container>
           <Header>
-            <Img src={logoImg.src} />
+            <Link href="/">
+              <Img src={logoImg.src} />
+            </Link>
           </Header>
           {children}
         </Container>
