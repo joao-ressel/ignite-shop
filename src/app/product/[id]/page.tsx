@@ -1,35 +1,38 @@
+// app/product/[id]/page.tsx
 import { getProductById } from "@/lib/stripe";
-import { Img } from "@/styles/global";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
+import ClientBuyButton from "@/components/client-buy-button";
+import Image from "next/image";
+import { Metadata } from "next";
 
-import { GetStaticPaths } from "next";
-interface ProductProps {
-  params: {
-    id: string;
+interface ProductPageProps {
+  params: { id: string };
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const product = await getProductById(params.id);
+
+  return {
+    title: product ? `Ignite Shop | ${product.name}` : "Produto não encontrado",
   };
 }
 
-export default async function ProductPage({ params }: ProductProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProductById(params.id);
+
+  if (!product) return <p>Produto não encontrado</p>;
 
   return (
     <ProductContainer>
       <ImageContainer>
-        <Img src={product?.image} alt={product?.name} width={520} height={480} />
+        <Image src={product.image} alt={product.name} width={520} height={480} />
       </ImageContainer>
       <ProductDetails>
-        <h1>{product?.name}</h1>
-        <span>{product?.price}</span>
-        <p>{product?.description}</p>
-        <button>Comprar agora</button>
+        <h1>{product.name}</h1>
+        <span>{product.price}</span>
+        <p>{product.description}</p>
+        <ClientBuyButton defaultPriceId={product.defaultPriceId} />
       </ProductDetails>
     </ProductContainer>
   );
 }
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [{ params: { id: "prodNl8zD9n7KXeD" } }],
-    fallback: "blocking",
-  };
-};

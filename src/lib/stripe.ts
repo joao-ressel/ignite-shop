@@ -32,25 +32,25 @@ export async function getProducts() {
 
 // Busca um produto pelo ID
 export async function getProductById(id: string) {
-    try {
-      const {
-        id: productId,
-        name,
-        images,
-        description,
-        default_price,
-      } = await stripe.products.retrieve(id, { expand: ["default_price"] });
-  
-      return {
-        id: productId,
-        name,
-        image: images[0] || "",
-        price: formatPrice(default_price as Stripe.Price),
-        description,
-      };
-    } catch (error) {
-      console.error("Erro ao buscar o produto:", error);
-      return null; // Retorna null se o produto não for encontrado
-    }
+  try {
+    const {
+      id: productId,
+      name,
+      images,
+      description,
+      default_price,
+    } = await stripe.products.retrieve(id, { expand: ["default_price"] });
+
+    return {
+      id: productId,
+      name,
+      image: images[0] || "",
+      price: formatPrice(default_price as Stripe.Price),
+      description,
+      defaultPriceId: (default_price as Stripe.Price)?.id, // ✅ Adicionado aqui
+    };
+  } catch (error) {
+    console.error("Erro ao buscar o produto:", error);
+    return null; // Retorna null se o produto não for encontrado
   }
-  
+}
