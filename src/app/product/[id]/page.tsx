@@ -1,4 +1,4 @@
-// app/product/[id]/page.tsx
+// src/app/product/[id]/page.tsx
 import { getProductById } from "@/lib/stripe";
 import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product";
 import ClientBuyButton from "@/components/client-buy-button";
@@ -10,7 +10,10 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = await getProductById(params.id);
+  // Awaiting params to ensure it's resolved
+  const { id } = await params;
+
+  const product = await getProductById(id);
 
   return {
     title: product ? `Ignite Shop | ${product.name}` : "Produto não encontrado",
@@ -18,7 +21,10 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProductById(params.id);
+  // Awaiting params to ensure it's resolved
+  const { id } = await params;
+
+  const product = await getProductById(id);
 
   if (!product) return <p>Produto não encontrado</p>;
 
