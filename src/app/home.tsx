@@ -1,10 +1,12 @@
 "use client"; // Garante que o componente seja renderizado no client
 
 import { useKeenSlider } from "keen-slider/react";
-import { HomeContainer, Product } from "@/styles/pages/home";
+import { CartButton, HomeContainer, Product } from "@/styles/pages/home";
 import { Img } from "@/styles/global";
 import Link from "next/link";
 import Head from "next/head";
+import { ShoppingBag } from "@phosphor-icons/react";
+
 interface HomeProps {
   products: {
     id: string;
@@ -34,8 +36,13 @@ export default function Home({ products }: HomeProps) {
             <Product className="keen-slider__slide">
               <Img src={product.images} width={520} height={480} />
               <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
+                <div>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </div>
+                <CartButton >
+                  <ShoppingBag size={32}/>
+                </CartButton>
               </footer>
             </Product>
           </Link>

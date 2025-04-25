@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
     "@stitches/react": "^1.2.8",
     "@tailwindcss/postcss": "^4.0.17",
     "axios": "^1.8.4",
@@ -17,7 +18,8 @@
     "next": "^15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "stripe": "^17.7.0"
+    "stripe": "^17.7.0",
+    "use-shopping-cart": "^3.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

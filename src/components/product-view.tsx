@@ -25,7 +25,7 @@ export default function ProductView({ product }: ProductViewProps) {
         <h1>{product.name}</h1>
         <span>{product.price}</span>
         <p>{product.description ?? "Sem descrição disponível."}</p>
-        <ClientBuyButton defaultPriceId={product.defaultPriceId} />
+        <ClientBuyButton />
       </ProductDetails>
     </ProductContainer>
   );

@@ -44,6 +44,12 @@ export const Product = styled("div", {
     opacity: 0,
     transition: "all 0.2s ease-in-out",
 
+    div: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "4px",
+    },
+    
     strong: {
       fontSize: "$lg",
       color: "$gray100",
@@ -60,5 +66,22 @@ export const Product = styled("div", {
       transform: "translateY(0%)",
       opacity: 1,
     },
+  },
+});
+
+export const CartButton = styled("button", {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "$green300",
+  border: "none",
+  height: "3rem  ",
+  width: "3rem",
+  borderRadius: "6px",
+  cursor: "pointer",
+
+  svg: {
+    color: "$gray100",
+    height: "1.5rem",
   },
 });
