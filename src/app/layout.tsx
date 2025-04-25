@@ -1,4 +1,4 @@
-import { getCssText } from "@/styles";
+"use client";
 import { Img } from "@/styles/global";
 import { globalStyles } from "@/styles/global";
 import logoImg from "../assets/logo.svg";
@@ -10,12 +10,6 @@ globalStyles();
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-br">
-      <head>
-        <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} />
-        <link rel="shortcut icon" href="/simbol.ico" type="image/x-icon" />
-        <title>Ignite Shop</title>
-      </head>
-
       <body>
         <Container>
           <Header>
