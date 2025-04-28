@@ -1,34 +1,47 @@
 "use client";
-import { CartProvider } from 'use-shopping-cart';  // Importe o CartProvider
-import { Img } from "@/styles/global";
-import { globalStyles } from "@/styles/global";
-import logoImg from "../assets/logo.svg";
-import { Container, Header } from "@/styles/pages/app";
 import Link from "next/link";
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY!; // O "!" força a conversão para string
+import { useState } from "react";
+import { CartProvider } from "use-shopping-cart";
+import { ShoppingBag } from "@phosphor-icons/react";
+
+import { Img } from "@/styles/global";
+import logoImg from "../assets/logo.svg";
+import { globalStyles } from "@/styles/global";
+import { Container, Header } from "@/styles/pages/app";
+import { CartModal } from "@/components/cart-modal";
+
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY!;
 
 globalStyles();
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  function handleOpenModal() {
+    setIsCartOpen(true);
+  }
   return (
     <html lang="pt-br">
-      <body>
-        <CartProvider
-          cartMode="checkout-session"
-          stripe={stripePublicKey} // Agora sem erro de tipagem
-          currency="BRL"
-          shouldPersist={true}
-        >
+      <CartProvider
+        cartMode="checkout-session"
+        stripe={stripePublicKey}
+        currency="BRL"
+        shouldPersist={true}
+      >
+        <body>
           <Container>
             <Header>
               <Link href="/">
                 <Img src={logoImg.src} />
               </Link>
+              <button onClick={handleOpenModal}>
+                <ShoppingBag size={32} />
+              </button>
             </Header>
             {children}
           </Container>
-        </CartProvider>
-      </body>
+        </body>
+        <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      </CartProvider>
     </html>
   );
 }

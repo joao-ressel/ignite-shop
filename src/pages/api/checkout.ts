@@ -2,10 +2,10 @@ import { stripe } from "@/lib/stripe";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const priceId = req.body.priceId;
+  const { lineItems } = req.body;
 
-  if (!priceId) {
-    return res.status(400).json({ error: "Price not found" });
+  if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
+    return res.status(400).json({ error: "Line items not found" });
   }
 
   const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
@@ -15,12 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     success_url: successUrl,
     cancel_url: cancelUrl,
     mode: "payment",
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
+    line_items: lineItems.map(item => ({
+      price: item.priceId,
+      quantity: item.quantity,
+    })),
   });
 
   return res.status(201).json({

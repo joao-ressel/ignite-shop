@@ -1,6 +1,3 @@
-import { useShoppingCart } from "use-shopping-cart";
-import { useState } from "react";
-import axios from "axios";
 import {
   Modal,
   Overlay,
@@ -12,8 +9,14 @@ import {
   Footer,
   Quantity,
   Total,
-} from "@/styles/pages/cart"; // Certifique-se de que o caminho está correto
+  CheckoutButton,
+} from "@/styles/pages/cart";
+
+import axios from "axios";
 import Image from "next/image";
+import { useState } from "react";
+import { X } from "@phosphor-icons/react";
+import { useShoppingCart } from "use-shopping-cart";
 
 type CartModalProps = {
   isOpen: boolean;
@@ -30,14 +33,17 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
 
       if (!cartDetails) return;
 
-      // Mapeia os itens do carrinho, incluindo price_id e currency
-      const lineItems = Object.entries(cartDetails).map(([id, item]) => ({
+     
+    const lineItems = Object.entries(cartDetails).map(([id, item]) => {
+      if (!item.price_id) {
+        throw new Error(`Item ${item.name} está sem price_id`);
+      }
+      return {
         id,
-        priceId: item.price_id, // Stripe price_id
+        priceId: item.price_id,
         quantity: item.quantity,
-        sku: item.sku, // SKU do item
-        currency: "BRL", // A moeda, como "BRL" ou "USD", por exemplo
-      }));
+      };
+    });
 
       const response = await axios.post("/api/checkout", {
         lineItems,
@@ -56,7 +62,9 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
   return (
     <Overlay onClick={onClose}>
       <Modal onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={onClose}>×</CloseButton>
+        <CloseButton onClick={onClose}>
+          <X size={32} />
+        </CloseButton>
         <Title>Sacola de compras</Title>
 
         {cartDetails &&
@@ -73,7 +81,7 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
                     currency: "BRL",
                   })}
                 </strong>
-                <button onClick={() => removeItem(id)}>Remover</button>
+                <button onClick={() => removeItem(item.id)}>Remover</button>
               </ProductInfo>
             </Product>
           ))}
@@ -86,15 +94,17 @@ export function CartModal({ isOpen, onClose }: CartModalProps) {
           <Total>
             <span>Valor total</span>
             <span>
-              {totalPrice?.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
+              {totalPrice
+                ? (totalPrice / 100).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })
+                : "R$ 0,00"}
             </span>
           </Total>
-          <button onClick={handleCheckout} disabled={isCreatingCheckoutSession}>
+          <CheckoutButton onClick={handleCheckout} disabled={isCreatingCheckoutSession}>
             Finalizar compra
-          </button>
+          </CheckoutButton>
         </Footer>
       </Modal>
     </Overlay>

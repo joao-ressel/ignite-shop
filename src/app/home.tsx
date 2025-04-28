@@ -1,11 +1,12 @@
-"use client"; // Garante que o componente seja renderizado no client
+"use client";
 
-import { useKeenSlider } from "keen-slider/react";
-import { CartButton, HomeContainer, Product } from "@/styles/pages/home";
-import { Img } from "@/styles/global";
 import Link from "next/link";
 import Head from "next/head";
+import { useKeenSlider } from "keen-slider/react";
 import { ShoppingBag } from "@phosphor-icons/react";
+
+import { Img } from "@/styles/global";
+import { CartButton, HomeContainer, Product } from "@/styles/pages/home";
 
 interface HomeProps {
   products: {
@@ -40,8 +41,8 @@ export default function Home({ products }: HomeProps) {
                   <strong>{product.name}</strong>
                   <span>{product.price}</span>
                 </div>
-                <CartButton >
-                  <ShoppingBag size={32}/>
+                <CartButton>
+                  <ShoppingBag size={32} />
                 </CartButton>
               </footer>
             </Product>

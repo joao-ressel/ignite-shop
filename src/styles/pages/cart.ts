@@ -6,7 +6,6 @@ export const Overlay = styled("div", {
   right: 0,
   bottom: 0,
   left: 0,
-  background: "rgba(0,0,0,0.5)",
   zIndex: 999,
 });
 
@@ -16,11 +15,12 @@ export const Modal = styled("aside", {
   right: 0,
   width: 480,
   height: "100vh",
-  background: "$gray900",
-  padding: "2rem",
+  background: "$gray800",
+  padding: "4rem",
   display: "flex",
   flexDirection: "column",
   zIndex: 1000,
+  boxShadow: "-4px 0px 30px 0px rgba(0, 0, 0, 0.80)",
 });
 
 export const Title = styled("h2", {
@@ -33,7 +33,7 @@ export const Title = styled("h2", {
 export const CloseButton = styled("button", {
   background: "transparent",
   border: "none",
-  color: "$gray400",
+  color: "$white",
   fontSize: "1.5rem",
   alignSelf: "flex-end",
   cursor: "pointer",
@@ -47,10 +47,10 @@ export const Product = styled("div", {
 });
 
 export const ProductImage = styled("div", {
-  width: 80,
+  minWidth: 80,
   height: 80,
   borderRadius: 8,
-  background: "linear-gradient(to bottom, #1ea483, #7465d4)",
+  background: "$gradient",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -61,7 +61,7 @@ export const ProductInfo = styled("div", {
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-
+  width: "100%",
   span: {
     color: "$gray300",
     fontSize: "1rem",
@@ -80,6 +80,7 @@ export const ProductInfo = styled("div", {
     cursor: "pointer",
     fontSize: "0.875rem",
     fontWeight: "bold",
+    textAlign: "end",
 
     "&:hover": {
       color: "$green300",

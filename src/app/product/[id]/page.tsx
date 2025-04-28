@@ -1,5 +1,5 @@
-import { getProductById } from "@/lib/stripe";
 import { Metadata } from "next";
+import { getProductById } from "@/lib/stripe";
 import ProductView from "@/components/product-view";
 
 interface ProductPageProps {
@@ -7,7 +7,7 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { id } = await params; // Aguarda a resolução de params
+  const { id } = await params;
   const product = await getProductById(id);
 
   return {
@@ -16,15 +16,17 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = await params; // Aguarda a resolução de params
+  const { id } = await params;
   const product = await getProductById(id);
 
   if (!product) return <p>Produto não encontrado</p>;
 
   return (
-    <ProductView product={{
-      ...product,
-      description: product.description ?? ""
-    }} />
+    <ProductView
+      product={{
+        ...product,
+        description: product.description ?? "",
+      }}
+    />
   );
 }
